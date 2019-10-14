@@ -4,23 +4,24 @@
 namespace Paymaster\Methods;
 
 
-use Paymaster\Paymaster;
 use Paymaster\Request;
-use Paymaster\Transport;
+use Paymaster\Interfaces\TransportInterface;
 use Exception;
 
 abstract class Base
 {
+    const BASE_URL = 'https://guarantee.money';
     protected $request;
     protected $url = null;
     protected $method = null;
     protected $data = null;
+    protected $params = null;
     /**
-     * @var Transport
+     * @var TransportInterface
      */
     private $transport;
 
-    public function __construct(Transport $transport)
+    public function __construct(TransportInterface $transport)
     {
         $this->transport = $transport;
         $this->request = new Request();
@@ -41,13 +42,13 @@ abstract class Base
         }
 
         $this->request->setUrl($url)->setMethod($method)->setData($data);
-
-        return $this;
     }
 
     public function execute()
     {
+
         $this->setupRequest();
+
         return $this->getTransport()->request($this->request);
 
     }
@@ -63,20 +64,22 @@ abstract class Base
             $pattern = array_map(
                 function ($item)
                     {
-                        return "{$item}";
+                        return "/\{$item\}/";
                     },
                 array_keys($replace)
             );
+
             $url = preg_replace($pattern, array_values($replace), $url);
+
         }
 
-        return $this->baseUrl ? $this->baseUrl.$url : $url;
+        return self::BASE_URL.($this->baseUrl ? $this->baseUrl.$url : $url);
     }
 
     /**
-     * @return Transport
+     * @return TransportInterface
      */
-    public function getTransport(): Transport
+    public function getTransport(): TransportInterface
     {
         return $this->transport;
     }

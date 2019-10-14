@@ -13,13 +13,14 @@ class Contracts extends Base
     /**
      * Получение списка активных предложений сделок пользователя
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
-    public function get(){
+    public function get($params = []){
         $this->url = $this->makePatch();
         $this->method = Request::GET;
+        $this->params = $params;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -27,14 +28,14 @@ class Contracts extends Base
      *
      * @param $data
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
     public function create($data){
         $this->url = $this->makePatch();
         $this->method = Request::POST;
         $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -42,13 +43,13 @@ class Contracts extends Base
      *
      * @param $id
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
     public function getContract($id){
         $this->url = $this->makePatch('/{id}', ['id' => $id]);
         $this->method = Request::GET;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -57,14 +58,14 @@ class Contracts extends Base
      * @param $id
      * @param $data
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
     public function updateContract($id, $data){
         $this->url = $this->makePatch('/{id}', ['id' => $id]);
         $this->method = Request::PUT;
         $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -73,40 +74,42 @@ class Contracts extends Base
      * @param $id
      * @param $version
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
     public function version($id, $version){
         $this->url = $this->makePatch('/{id}/versions/{version}', ['id' => $id, 'version' => $version]);
         $this->method = Request::GET;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
      * Получение списка транзакций по предложению сделке
      *
      * @param $id
-     * @param $data
+     * @param $params
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
-    public function transactions($id, $data){
+    public function transactions($id, $params = []){
         $this->url = $this->makePatch('/{id}/transactions', ['id' => $id]);
         $this->method = Request::GET;
+        $this->params = $params;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
      * Получение списка публичных предложений сделок
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
-    public function publicContracts(){
+    public function publicContracts($params = []){
         $this->method = Request::GET;
         $this->url = $this->makePatch('/public');
+        $this->params = $params;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -114,23 +117,24 @@ class Contracts extends Base
      *
      * @param $id
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
     public function publicContract($id){
         $this->method = Request::GET;
         $this->url = $this->makePatch('/public/{id}', ['id' => $id]);
 
-        return $this;
+        return $this->execute();
     }
 
     /**
      * Получение списка закрытых/завершенных предложений сделок пользователя или юзер-сервиса
      */
-    public function history(){
+    public function history($params = []){
         $this->method = Request::GET;
         $this->url = $this->makePatch('/history');
+        $this->params = $params;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -138,13 +142,14 @@ class Contracts extends Base
      *
      * @param $id
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
-    public function accept($id){
+    public function accept($id ,$data){
         $this->url = $this->makePatch('/{id}/accept', ['id' => $id]);
         $this->method = Request::POST;
+        $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -152,12 +157,13 @@ class Contracts extends Base
      *
      * @param $id
      *
-     * @return Contracts
+     * @return \Paymaster\Response
      */
-    public function decline($id){
+    public function decline($id, $data){
         $this->url = $this->makePatch('/{id}/decline', ['id' => $id]);
         $this->method = Request::POST;
+        $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 }

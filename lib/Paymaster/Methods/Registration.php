@@ -15,13 +15,13 @@ class Registration extends Base
      *
      * @param $data
      *
-     * @return Registration
+     * @return \Paymaster\Response
      */
     public function registration($data){
         $this->url = $this->makePatch();
         $this->method = Request::POST;
         $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 }

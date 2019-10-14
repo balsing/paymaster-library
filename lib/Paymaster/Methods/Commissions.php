@@ -13,20 +13,28 @@ class Commissions extends Base
     /**
      * Расчёт комиссии сервиса по сделке исходя из переданных параметров
      *
-     * @return $this
+     * @param $params
+     *
+     * @return \Paymaster\Response
      */
-    public function calculate(){
+    public function calculate($params){
         $this->url = $this->makePatch('/calculate');
         $this->method = Request::GET;
+        $this->params = $params;
 
-        return $this;
+        return $this->execute();
     }
 
+    /**
+     * @param $data
+     *
+     * @return \Paymaster\Response
+     */
     public function calculateDynamic($data){
         $this->url = $this->makePatch('/calculate-dynamic');
         $this->method = Request::POST;
         $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 }

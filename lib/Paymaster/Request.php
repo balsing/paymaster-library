@@ -4,6 +4,7 @@
 namespace Paymaster;
 
 use Exception;
+use Paymaster\Interfaces\RequestInterface;
 
 /**
  * Класс, предоставляет собой единый интерфейс для отправления параметров.
@@ -11,7 +12,7 @@ use Exception;
  * Class Request
  * @package Paymaster
  */
-class Request
+class Request implements RequestInterface
 {
     public const GET = 'GET';
     public const POST = 'POST';
@@ -19,6 +20,7 @@ class Request
     public const DELETE = 'DELETE';
 
     private $data = [];
+    private $params = [];
     private $url = '';
     private $token = '';
     private $method = self::GET;
@@ -133,5 +135,21 @@ class Request
             self::PUT,
             self::DELETE,
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function setParams(?array $params): void
+    {
+        $this->params = $params;
     }
 }

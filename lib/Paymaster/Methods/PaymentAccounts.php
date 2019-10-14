@@ -13,13 +13,14 @@ class PaymentAccounts extends Base
     /**
      * Получить список кошельков/счетов пользователя
      *
-     * @return $this
+     * @return \Paymaster\Response
      */
-    public function get(){
+    public function get($params = []){
         $this->url = $this->makePatch();
         $this->method = Request::GET;
+        $this->params = $params;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -27,7 +28,7 @@ class PaymentAccounts extends Base
      *
      * @param $data
      *
-     * @return PaymentAccounts
+     * @return \Paymaster\Response
      */
     public function create($data )
     {
@@ -35,7 +36,7 @@ class PaymentAccounts extends Base
         $this->method = Request::POST;
         $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -43,13 +44,13 @@ class PaymentAccounts extends Base
      *
      * @param $id
      *
-     * @return PaymentAccounts
+     * @return \Paymaster\Response
      */
     public function delete($id)
     {
         $this->url = $this->makePatch('/{id}', ['id' => $id]);
         $this->method = Request::DELETE;
 
-        return $this;
+        return $this->execute();
     }
 }

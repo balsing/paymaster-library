@@ -11,8 +11,12 @@ use Paymaster\Methods\PaymentAccounts;
 use Paymaster\Methods\Profile;
 use Paymaster\Methods\Registration;
 use Paymaster\Methods\Users;
-use Paymaster\Transport\TransportInterface;
+use Paymaster\Interfaces\TransportInterface;
 
+/**
+ * Class Methods
+ * @package Paymaster
+ */
 class Methods
 {
     /**

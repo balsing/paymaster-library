@@ -13,14 +13,15 @@ class Users extends Base
     /**
      * Получение информации о пользователе
      *
-     * @return $this
+     * @return \Paymaster\Response
      */
-    public function get()
+    public function get($params)
     {
         $this->url = $this->makePatch();
         $this->method = Request::GET;
+        $this->params = $params;
 
-        return $this;
+        return $this->execute();
     }
 
 }

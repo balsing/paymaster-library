@@ -3,7 +3,8 @@
 
 namespace Paymaster;
 
-use Paymaster\Transport\TransportInterface;
+use Paymaster\Interfaces\TransportInterface;
+use Paymaster\Transport\HttpClientTransport;
 
 /**
  * Основной
@@ -18,8 +19,17 @@ class Paymaster extends Methods
      */
     protected $transport = null;
 
-    public function __construct(TransportInterface $transport)
+    /**
+     * Paymaster constructor.
+     *
+     * @param TransportInterface|null $transport
+     */
+    public function __construct(TransportInterface $transport = null)
     {
-        $this->transport = $transport;
+        $this->transport = is_null($transport) ? new HttpClientTransport(): $transport;
+    }
+
+    public function setBearerToken($token){
+        $this->transport->setBearerToken($token);
     }
 }

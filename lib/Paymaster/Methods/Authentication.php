@@ -20,7 +20,7 @@ class Authentication extends Base
      *
      * @param $data
      *
-     * @return Authentication
+     * @return \Paymaster\Response
      */
     public function authentication($data)
     {
@@ -28,7 +28,7 @@ class Authentication extends Base
         $this->method = Request::POST;
         $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 
     /**
@@ -36,7 +36,7 @@ class Authentication extends Base
      *
      * @param $data
      *
-     * @return Authentication
+     * @return \Paymaster\Response
      */
     public function refresh($data)
     {
@@ -44,6 +44,6 @@ class Authentication extends Base
         $this->method = Request::POST;
         $this->data = $data;
 
-        return $this;
+        return $this->execute();
     }
 }
