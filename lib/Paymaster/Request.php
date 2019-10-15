@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Paymaster;
 
 use Exception;
@@ -10,7 +9,6 @@ use Paymaster\Interfaces\RequestInterface;
  * Класс, предоставляет собой единый интерфейс для отправления параметров.
  *
  * Class Request
- * @package Paymaster
  */
 class Request implements RequestInterface
 {
@@ -22,7 +20,6 @@ class Request implements RequestInterface
     private $data = [];
     private $params = [];
     private $url = '';
-    private $token = '';
     private $method = self::GET;
 
     /**
@@ -58,9 +55,9 @@ class Request implements RequestInterface
      *
      * @return $this
      */
-    public function setData(?array $data)
+    public function setData(?array $data): Request
     {
-        if(is_array($data)){
+        if (is_array($data)) {
             $this->data = $data;
         }
 
@@ -83,26 +80,6 @@ class Request implements RequestInterface
     /**
      * @return string
      */
-    public function getToken(): string
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param string $token
-     *
-     * @return Request
-     */
-    public function setToken(string $token)
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->method;
@@ -110,6 +87,10 @@ class Request implements RequestInterface
 
     /**
      * @param string $method
+     *
+     * @return $this
+     *
+     * @throws Exception
      */
     public function setMethod(string $method)
     {
@@ -146,10 +127,16 @@ class Request implements RequestInterface
     }
 
     /**
-     * @param array $params
+     * @param array|null $params
+     *
+     * @return Request
      */
-    public function setParams(?array $params): void
+    public function setParams(?array $params): Request
     {
-        $this->params = $params;
+        if (is_array($params)) {
+            $this->params = $params;
+        }
+
+        return $this;
     }
 }

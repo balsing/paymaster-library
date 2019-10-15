@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Paymaster\Interfaces;
-
 
 interface RequestInterface
 {
@@ -15,10 +13,6 @@ interface RequestInterface
     public function setData(?array $data);
 
     public function addData(string $key, $value);
-
-    public function getToken(): string;
-
-    public function setToken(string $token);
 
     public function getMethod(): string;
 

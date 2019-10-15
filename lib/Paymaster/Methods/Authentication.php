@@ -1,22 +1,20 @@
 <?php
 
-
 namespace Paymaster\Methods;
 
 use Paymaster\Request;
 
 /**
- * Класс, содержащий методы авторизации
+ * Класс, содержащий методы авторизации.
  *
  * Class Aauthentication
- * @package Paymaster\Methods
  */
 class Authentication extends Base
 {
     protected $baseUrl = '/api/authentication';
 
     /**
-     * Получение токенов доступа по логину и паролю
+     * Получение токенов доступа по логину и паролю.
      *
      * @param $data
      *
@@ -32,7 +30,7 @@ class Authentication extends Base
     }
 
     /**
-     * Получение токенов доступа по логину и рефреш-токену
+     * Получение токенов доступа по логину и рефреш-токену.
      *
      * @param $data
      *

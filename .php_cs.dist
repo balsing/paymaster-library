@@ -1,0 +1,16 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__)
+    ->ignoreDotFiles(false)
+    ->ignoreVCS(true)
+    ->exclude(['var', 'bin', 'tests/_support/_generated', 'docker', 'vendor'])
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+    ])
+    ->setFinder($finder)
+;

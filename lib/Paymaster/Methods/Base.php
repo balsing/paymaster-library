@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Paymaster\Methods;
-
 
 use Paymaster\Request;
 use Paymaster\Interfaces\TransportInterface;
@@ -20,6 +18,7 @@ abstract class Base
      * @var TransportInterface
      */
     private $transport;
+    private $baseUrl = '';
 
     public function __construct(TransportInterface $transport)
     {
@@ -29,10 +28,10 @@ abstract class Base
 
     public function setupRequest()
     {
-
         $url = $this->url;
         $method = $this->method;
         $data = $this->data;
+        $params = $this->params;
         if (is_null($url)) {
             throw new Exception('Patch not specified');
         }
@@ -41,16 +40,14 @@ abstract class Base
             throw new Exception('Method not specified');
         }
 
-        $this->request->setUrl($url)->setMethod($method)->setData($data);
+        $this->request->setUrl($url)->setMethod($method)->setData($data)->setParams($params);
     }
 
     public function execute()
     {
-
         $this->setupRequest();
 
         return $this->getTransport()->request($this->request);
-
     }
 
     /**
@@ -62,18 +59,16 @@ abstract class Base
     {
         if (!is_null($replace)) {
             $pattern = array_map(
-                function ($item)
-                    {
-                        return "/\{$item\}/";
-                    },
+                function ($item) {
+                    return "/\{$item\}/";
+                },
                 array_keys($replace)
             );
 
             $url = preg_replace($pattern, array_values($replace), $url);
-
         }
 
-        return self::BASE_URL.($this->baseUrl ? $this->baseUrl.$url : $url);
+        return $this->baseUrl.$url;
     }
 
     /**

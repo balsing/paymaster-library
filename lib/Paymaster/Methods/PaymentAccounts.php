@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Paymaster\Methods;
-
 
 use Paymaster\Request;
 
@@ -11,13 +9,15 @@ class PaymentAccounts extends Base
     protected $baseUrl = '/api/profile/payment-accounts';
 
     /**
-     * Получить список кошельков/счетов пользователя
+     * Получить список кошельков/счетов пользователя.
      *
      * @return \Paymaster\Response
      */
-    public function get($params = []){
+    public function get($params = [])
+    {
         $this->url = $this->makePatch();
         $this->method = Request::GET;
+
         $this->params = $params;
 
         return $this->execute();
@@ -30,7 +30,7 @@ class PaymentAccounts extends Base
      *
      * @return \Paymaster\Response
      */
-    public function create($data )
+    public function create($data)
     {
         $this->url = $this->makePatch();
         $this->method = Request::POST;

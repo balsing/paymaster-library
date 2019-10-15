@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Paymaster;
 
 use Paymaster\Interfaces\ResponseInterface;
@@ -9,7 +8,6 @@ use Paymaster\Interfaces\ResponseInterface;
  * Класс, предоставляет собой единый интерфейс для обработки результатов запроса.
  *
  * Class Response
- * @package Paymaster
  */
 class Response implements ResponseInterface
 {
@@ -20,7 +18,8 @@ class Response implements ResponseInterface
     private $errorResourceKey;
     private $errorByCode = null;
 
-    private function getErrorCodes(){
+    private function getErrorCodes()
+    {
         return [
             'Ok',
             'InvalidHash',
@@ -109,11 +108,10 @@ class Response implements ResponseInterface
     /**
      * @return mixed|null
      */
-    protected function getErrorByCode()
+    public function getErrorByCode()
     {
-
         if (is_null($this->errorByCode)) {
-            if(intval($this->code) > 0){
+            if (intval($this->code) > 0) {
                 $codes = $this->getErrorCodes();
                 $code = $this->code - 1;
                 $this->errorByCode = $codes[$code];
@@ -124,40 +122,28 @@ class Response implements ResponseInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSuccess()
     {
         return $this->isSuccess;
     }
 
-    /**
-     * @return null
-     */
     public function getCode()
     {
         return $this->code;
     }
 
-    /**
-     * @return null
-     */
     public function getData()
     {
         return $this->data;
     }
 
-    /**
-     * @return null
-     */
     public function getError()
     {
         return $this->error;
     }
 
-    /**
-     * @return null
-     */
     public function getErrorResourceKey()
     {
         return $this->errorResourceKey;

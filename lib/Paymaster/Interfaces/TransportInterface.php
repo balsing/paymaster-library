@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Paymaster\Interfaces;
-
 
 interface TransportInterface
 {

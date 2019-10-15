@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Paymaster\Methods;
-
 
 use Paymaster\Request;
 
@@ -11,11 +9,12 @@ class Contracts extends Base
     protected $baseUrl = '/api/contracts';
 
     /**
-     * Получение списка активных предложений сделок пользователя
+     * Получение списка активных предложений сделок пользователя.
      *
      * @return \Paymaster\Response
      */
-    public function get($params = []){
+    public function get($params = [])
+    {
         $this->url = $this->makePatch();
         $this->method = Request::GET;
         $this->params = $params;
@@ -24,13 +23,14 @@ class Contracts extends Base
     }
 
     /**
-     * Создание нового предложения сделки
+     * Создание нового предложения сделки.
      *
      * @param $data
      *
      * @return \Paymaster\Response
      */
-    public function create($data){
+    public function create($data)
+    {
         $this->url = $this->makePatch();
         $this->method = Request::POST;
         $this->data = $data;
@@ -39,13 +39,14 @@ class Contracts extends Base
     }
 
     /**
-     * Получение информации по предложению сделки
+     * Получение информации по предложению сделки.
      *
      * @param $id
      *
      * @return \Paymaster\Response
      */
-    public function getContract($id){
+    public function getContract($id)
+    {
         $this->url = $this->makePatch('/{id}', ['id' => $id]);
         $this->method = Request::GET;
 
@@ -53,14 +54,15 @@ class Contracts extends Base
     }
 
     /**
-     * Отправка встречных условий по предложению сделки
+     * Отправка встречных условий по предложению сделки.
      *
      * @param $id
      * @param $data
      *
      * @return \Paymaster\Response
      */
-    public function updateContract($id, $data){
+    public function updateContract($id, $data)
+    {
         $this->url = $this->makePatch('/{id}', ['id' => $id]);
         $this->method = Request::PUT;
         $this->data = $data;
@@ -69,14 +71,15 @@ class Contracts extends Base
     }
 
     /**
-     * Получение указанной версии предложения сделки
+     * Получение указанной версии предложения сделки.
      *
      * @param $id
      * @param $version
      *
      * @return \Paymaster\Response
      */
-    public function version($id, $version){
+    public function version($id, $version)
+    {
         $this->url = $this->makePatch('/{id}/versions/{version}', ['id' => $id, 'version' => $version]);
         $this->method = Request::GET;
 
@@ -84,14 +87,15 @@ class Contracts extends Base
     }
 
     /**
-     * Получение списка транзакций по предложению сделке
+     * Получение списка транзакций по предложению сделке.
      *
      * @param $id
      * @param $params
      *
      * @return \Paymaster\Response
      */
-    public function transactions($id, $params = []){
+    public function transactions($id, $params = [])
+    {
         $this->url = $this->makePatch('/{id}/transactions', ['id' => $id]);
         $this->method = Request::GET;
         $this->params = $params;
@@ -100,11 +104,12 @@ class Contracts extends Base
     }
 
     /**
-     * Получение списка публичных предложений сделок
+     * Получение списка публичных предложений сделок.
      *
      * @return \Paymaster\Response
      */
-    public function publicContracts($params = []){
+    public function publicContracts($params = [])
+    {
         $this->method = Request::GET;
         $this->url = $this->makePatch('/public');
         $this->params = $params;
@@ -113,13 +118,14 @@ class Contracts extends Base
     }
 
     /**
-     * Получение информации по публичному предложению сделки
+     * Получение информации по публичному предложению сделки.
      *
      * @param $id
      *
      * @return \Paymaster\Response
      */
-    public function publicContract($id){
+    public function publicContract($id)
+    {
         $this->method = Request::GET;
         $this->url = $this->makePatch('/public/{id}', ['id' => $id]);
 
@@ -127,9 +133,10 @@ class Contracts extends Base
     }
 
     /**
-     * Получение списка закрытых/завершенных предложений сделок пользователя или юзер-сервиса
+     * Получение списка закрытых/завершенных предложений сделок пользователя или юзер-сервиса.
      */
-    public function history($params = []){
+    public function history($params = [])
+    {
         $this->method = Request::GET;
         $this->url = $this->makePatch('/history');
         $this->params = $params;
@@ -138,13 +145,14 @@ class Contracts extends Base
     }
 
     /**
-     * Принятие предложения сделки
+     * Принятие предложения сделки.
      *
      * @param $id
      *
      * @return \Paymaster\Response
      */
-    public function accept($id ,$data){
+    public function accept($id, $data)
+    {
         $this->url = $this->makePatch('/{id}/accept', ['id' => $id]);
         $this->method = Request::POST;
         $this->data = $data;
@@ -153,13 +161,14 @@ class Contracts extends Base
     }
 
     /**
-     * Отклонение предложения сделки
+     * Отклонение предложения сделки.
      *
      * @param $id
      *
      * @return \Paymaster\Response
      */
-    public function decline($id, $data){
+    public function decline($id, $data)
+    {
         $this->url = $this->makePatch('/{id}/decline', ['id' => $id]);
         $this->method = Request::POST;
         $this->data = $data;

@@ -1,23 +1,21 @@
 <?php
 
-
 namespace Paymaster;
 
 use Paymaster\Interfaces\TransportInterface;
 use Paymaster\Transport\HttpClientTransport;
 
 /**
- * Основной
+ * Основной.
  *
  * Class Controller
- * @package Paymaster
  */
 class Paymaster extends Methods
 {
     /**
-     * @var TransportInterface|null
+     * @var TransportInterface
      */
-    protected $transport = null;
+    protected $transport;
 
     /**
      * Paymaster constructor.
@@ -26,10 +24,11 @@ class Paymaster extends Methods
      */
     public function __construct(TransportInterface $transport = null)
     {
-        $this->transport = is_null($transport) ? new HttpClientTransport(): $transport;
+        $this->transport = is_null($transport) ? new HttpClientTransport() : $transport;
     }
 
-    public function setBearerToken($token){
+    public function setBearerToken($token)
+    {
         $this->transport->setBearerToken($token);
     }
 }

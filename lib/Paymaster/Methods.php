@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Paymaster;
 
 use Paymaster\Methods\Authentication;
@@ -14,15 +13,14 @@ use Paymaster\Methods\Users;
 use Paymaster\Interfaces\TransportInterface;
 
 /**
- * Class Methods
- * @package Paymaster
+ * Class Methods.
  */
 class Methods
 {
     /**
-     * @var TransportInterface|null
+     * @var TransportInterface
      */
-    protected $transport = null;
+    protected $transport;
 
     /**
      * @var Paymaster|null

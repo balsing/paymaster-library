@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Paymaster\Interfaces;
-
 
 interface ResponseInterface
 {
@@ -15,4 +13,6 @@ interface ResponseInterface
     public function getError();
 
     public function getErrorResourceKey();
+
+    public function getErrorByCode();
 }
