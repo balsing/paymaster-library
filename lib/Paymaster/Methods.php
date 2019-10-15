@@ -10,6 +10,7 @@ use Paymaster\Methods\PaymentAccounts;
 use Paymaster\Methods\Profile;
 use Paymaster\Methods\Registration;
 use Paymaster\Methods\Users;
+use Paymaster\Methods\Payment;
 use Paymaster\Interfaces\TransportInterface;
 
 /**
@@ -60,6 +61,11 @@ class Methods
      * @var Users|null
      */
     protected $users = null;
+
+    /**
+     * @var Payment|null
+     */
+    private $payment = null;
 
     /**
      * @return Authentication
@@ -155,5 +161,17 @@ class Methods
         }
 
         return $this->users;
+    }
+
+
+    /**
+     * @return Payment
+     */
+    public function getPayment(){
+        if (is_null($this->payment)) {
+            $this->payment = new Payment($this->transport);
+        }
+
+        return $this->payment;
     }
 }
