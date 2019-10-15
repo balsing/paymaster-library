@@ -28,14 +28,14 @@ class TestTransport implements TransportInterface
     {
         $url = $request->getUrl();
         switch ($url) {
+            case Base::BASE_URL.'/api/authentication':
+                $response = $this->authentication($request);
+                break;
             case Base::BASE_URL.'/api/profile/payment-accounts':
                 $response = $this->profilePaymentAccountsStub($request);
                 break;
             case Base::BASE_URL.'/api/contracts':
                 $response = $this->contracts($request);
-                break;
-            case Base::BASE_URL.'/api/authentication':
-                $response = $this->authentication($request);
                 break;
             case Base::BASE_URL.'/api/registration/service-user':
                 $response = $this->registration($request);
@@ -68,6 +68,48 @@ class TestTransport implements TransportInterface
     }
 
     /**
+     * Заглушка для запросов по адресу https://guarantee.money/api/authentication .
+     *
+     * @param RequestInterface $request
+     *
+     * @return Response
+     */
+    private function authentication(RequestInterface $request)
+    {
+        $keys = ['UserLogin', 'Password'];
+        $resultValidation = $this->validateKeys($request, $keys);
+        if (false === $resultValidation) {
+            return $this->returnError();
+        }
+
+        return new Response(
+            [
+                'IsSuccess' => true,
+                'Code' => 0,
+                'Data' => [
+                    'AccessToken' => 'testAccessToken',
+                    'TokenType' => 'bearer',
+                    'ExpiresIn' => '86399',
+                    'RefreshToken' => 'refreshToken',
+                    'UserLogin' => 'Genesis',
+                    'AccessIssued' => 'Tue, 15 Oct 2019 06:55:38 GMT',
+                    'AccessExpires' => 'Wed, 16 Oct 2019 06:55:38 GMT',
+                    'RefreshIssued' => 'Tue, 15 Oct 2019 06:55:38 GMT',
+                    'RefreshExpires' => 'Wed, 16 Oct 2019 06:55:38 GMT',
+                    'Roles' => [
+                        0 => 'Admin',
+                        1 => 'Service',
+                    ],
+                ],
+                'Error' => null,
+                'ErrorResourceKey' => '0_error_code',
+                'Description' => null,
+                'Advices' => null,
+            ]
+        );
+    }
+
+    /**
      * Заглушка для запросов по адресу https://guarantee.money/api/profile/payment-accounts .
      *
      * @param RequestInterface $request
@@ -76,6 +118,10 @@ class TestTransport implements TransportInterface
      */
     private function profilePaymentAccountsStub(RequestInterface $request)
     {
+        $checkToken = $this->checkToken();
+        if (false === $checkToken) {
+            return $this->returnError();
+        }
         if (Request::GET == $request->getMethod()) {
             $params = $request->getParams();
             if ($params['userLogin'] == htmlspecialchars(self::DEFAULT_OWNER_LOGIN)) {
@@ -167,6 +213,8 @@ class TestTransport implements TransportInterface
                 ]
             );
         }
+
+        return $this->returnError();
     }
 
     /**
@@ -174,10 +222,14 @@ class TestTransport implements TransportInterface
      *
      * @param RequestInterface $request
      *
-     * @return bool|Response
+     * @return Response
      */
     private function contracts(RequestInterface $request)
     {
+        $checkToken = $this->checkToken();
+        if (false === $checkToken) {
+            return $this->returnError();
+        }
         if (Request::POST === $request->getMethod()) {
             $keys = [
                 'UserLogin',
@@ -274,43 +326,9 @@ class TestTransport implements TransportInterface
                     'Advices' => null,
                 ]
             );
-        } else {
-        }
-    }
-
-    private function authentication(RequestInterface $request)
-    {
-        $keys = ['UserLogin', 'Password'];
-        $resultValidation = $this->validateKeys($request, $keys);
-        if (false === $resultValidation) {
-            return $this->returnError();
         }
 
-        return new Response(
-            [
-                'IsSuccess' => true,
-                'Code' => 0,
-                'Data' => [
-                    'AccessToken' => 'testAccessToken',
-                    'TokenType' => 'bearer',
-                    'ExpiresIn' => '86399',
-                    'RefreshToken' => 'refreshToken',
-                    'UserLogin' => 'Genesis',
-                    'AccessIssued' => 'Tue, 15 Oct 2019 06:55:38 GMT',
-                    'AccessExpires' => 'Wed, 16 Oct 2019 06:55:38 GMT',
-                    'RefreshIssued' => 'Tue, 15 Oct 2019 06:55:38 GMT',
-                    'RefreshExpires' => 'Wed, 16 Oct 2019 06:55:38 GMT',
-                    'Roles' => [
-                        0 => 'Admin',
-                        1 => 'Service',
-                    ],
-                ],
-                'Error' => null,
-                'ErrorResourceKey' => '0_error_code',
-                'Description' => null,
-                'Advices' => null,
-            ]
-        );
+        return $this->returnError();
     }
 
     /**
@@ -323,6 +341,10 @@ class TestTransport implements TransportInterface
      */
     private function registration(RequestInterface $request)
     {
+        $checkToken = $this->checkToken();
+        if (false === $checkToken) {
+            return $this->returnError();
+        }
         if (Request::POST === $request->getMethod()) {
             $keys = ['Login', 'Email', 'FirstName', 'Surname', 'Patronymic'];
             $resultValidation = $this->validateKeys($request, $keys);
@@ -346,8 +368,21 @@ class TestTransport implements TransportInterface
         }
     }
 
+    /**
+     * Заглушка для запросов по адресу
+     * https://guarantee.money/api/contracts/{DEFAULT_CONTRACT_ID}/accept.
+     *
+     * @param RequestInterface $request
+     *
+     * @return Response
+     */
     private function acceptContract(RequestInterface $request)
     {
+        $checkToken = $this->checkToken();
+        if (false === $checkToken) {
+            return $this->returnError();
+        }
+
         return new Response(
             [
                 'IsSuccess' => true,
@@ -367,6 +402,14 @@ class TestTransport implements TransportInterface
         );
     }
 
+    /**
+     * Заглушка для запросов по адресу
+     * https://guarantee.money/api/contracts/{DEFAULT_CONTRACT_ID}/decline.
+     *
+     * @param RequestInterface $request
+     *
+     * @return Response
+     */
     private function declineContract(RequestInterface $request)
     {
         $keys = ['UserLogin'];
@@ -385,44 +428,14 @@ class TestTransport implements TransportInterface
         );
     }
 
-    private function validateKeys(RequestInterface $request, $keys)
-    {
-        $params = $request->getParams();
-        $params = array_merge($params, $request->getData());
-
-        foreach ($keys as $key) {
-            if (!array_key_exists($key, $params)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function returnError()
-    {
-        return new Response(
-            [
-                'IsSuccess' => false,
-                'Code' => 10,
-                'Data' => 0,
-                'Error' => 'Validation error occurred while adding purse',
-                'ErrorResourceKey' => '10_error_code',
-                'Description' => 'Пользователь не найден (либо не полные данные по карте)',
-                'Advices' => null,
-            ]
-        );
-    }
-
-    private function numberFormat($number)
-    {
-        if (function_exists('renumber_format')) {
-            return renumber_format((float) $number, 1, '.', '');
-        } else {
-            throw new \Exception('Function `renumber_format` not exist');
-        }
-    }
-
+    /**
+     * Заглушка для запросов по адресу
+     * https://guarantee.money/api/deals/get-by-contractId/{DEFAULT_CONTRACT_ID}.
+     *
+     * @param RequestInterface $request
+     *
+     * @return Response
+     */
     private function getContract(RequestInterface $request)
     {
         return new Response(
@@ -523,6 +536,14 @@ class TestTransport implements TransportInterface
         );
     }
 
+    /**
+     * Заглушка для запросов по адресу
+     * https://guarantee.money/api/deals/{DEFAULT_DEAL_ID}/open-dispute.
+     *
+     * @param RequestInterface $request
+     *
+     * @return Response
+     */
     private function openDispute(RequestInterface $request)
     {
         $keys = ['DisputeReason', 'UserLogin'];
@@ -591,5 +612,76 @@ class TestTransport implements TransportInterface
             'Description' => null,
             'Advices' => null,
         ]);
+    }
+
+    /**
+     * Проверяет что в объекте Response присутствуют все необходимые параметры.
+     *
+     * @param RequestInterface $request
+     * @param                  $keys
+     *
+     * @return bool
+     */
+    private function validateKeys(RequestInterface $request, $keys)
+    {
+        $params = $request->getParams();
+        $params = array_merge($params, $request->getData());
+
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $params)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Возвращает ошибку сервиса.
+     *
+     * @return Response
+     */
+    private function returnError()
+    {
+        return new Response(
+            [
+                'IsSuccess' => false,
+                'Code' => 10,
+                'Data' => 0,
+                'Error' => 'Validation error occurred while adding purse',
+                'ErrorResourceKey' => '10_error_code',
+                'Description' => 'Пользователь не найден (либо не полные данные по карте)',
+                'Advices' => null,
+            ]
+        );
+    }
+
+    /**
+     * Форматирует число в формат, возвращаемый сервисом
+     *
+     * @param $number
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    private function numberFormat($number)
+    {
+        if (function_exists('renumber_format')) {
+            return renumber_format((float) $number, 1, '.', '');
+        } else {
+            throw new \Exception('Function `renumber_format` not exist');
+        }
+    }
+
+    /**
+     * Проверяет установлен ли токен.
+     * Нужно использовать, чтобы на проекте не забыть установить токен.
+     *
+     * @return bool
+     */
+    private function checkToken()
+    {
+        return !is_null($this->token);
     }
 }

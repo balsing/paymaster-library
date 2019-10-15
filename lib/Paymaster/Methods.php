@@ -163,13 +163,13 @@ class Methods
         return $this->users;
     }
 
-
     /**
      * @return Payment
      */
-    public function getPayment(){
+    public function getPayment()
+    {
         if (is_null($this->payment)) {
-            $this->payment = new Payment($this->transport);
+            $this->payment = new Payment();
         }
 
         return $this->payment;

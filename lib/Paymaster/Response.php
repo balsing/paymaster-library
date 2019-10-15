@@ -106,7 +106,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * @return mixed|null
+     * @return string
      */
     public function getErrorByCode()
     {
@@ -118,7 +118,7 @@ class Response implements ResponseInterface
             }
         }
 
-        return $this->errorByCode;
+        return (string) $this->errorByCode;
     }
 
     /**

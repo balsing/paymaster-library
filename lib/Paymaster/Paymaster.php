@@ -4,6 +4,7 @@ namespace Paymaster;
 
 use Paymaster\Interfaces\TransportInterface;
 use Paymaster\Transport\HttpClientTransport;
+use Paymaster\Transport\TestTransport;
 
 /**
  * Основной.
@@ -12,6 +13,7 @@ use Paymaster\Transport\HttpClientTransport;
  */
 class Paymaster extends Methods
 {
+    const DEV_MODE = 'develop';
     /**
      * @var TransportInterface
      */
@@ -22,9 +24,13 @@ class Paymaster extends Methods
      *
      * @param TransportInterface|null $transport
      */
-    public function __construct(TransportInterface $transport = null)
+    public function __construct($mode = null)
     {
-        $this->transport = is_null($transport) ? new HttpClientTransport() : $transport;
+        if (self::DEV_MODE === $mode) {
+            $this->transport = new TestTransport();
+        } else {
+            $this->transport = new HttpClientTransport();
+        }
     }
 
     public function setBearerToken($token)
