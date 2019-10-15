@@ -18,7 +18,7 @@ abstract class Base
      * @var TransportInterface
      */
     private $transport;
-    private $baseUrl = '';
+    protected $baseUrl = '';
 
     public function __construct(TransportInterface $transport)
     {
@@ -68,7 +68,8 @@ abstract class Base
             $url = preg_replace($pattern, array_values($replace), $url);
         }
 
-        return $this->baseUrl.$url;
+
+        return self::BASE_URL.$this->baseUrl.$url;
     }
 
     /**
