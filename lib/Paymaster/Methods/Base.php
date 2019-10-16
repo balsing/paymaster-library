@@ -68,7 +68,6 @@ abstract class Base
             $url = preg_replace($pattern, array_values($replace), $url);
         }
 
-
         return self::BASE_URL.$this->baseUrl.$url;
     }
 

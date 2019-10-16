@@ -18,6 +18,7 @@ class TestTransport implements TransportInterface
 {
     const DEFAULT_OWNER_LOGIN = '+79091234567';
     const DEFAULT_RENTER_LOGIN = '+79000000000';
+    const DEFAULT_USER_ID = '129001';
     const DEFAULT_CONTRACT_ID = '498765';
     const DEFAULT_DEAL_ID = '387000';
     const DEFAULT_SERVICE_ID = '123456';
@@ -51,6 +52,9 @@ class TestTransport implements TransportInterface
                 break;
             case Base::BASE_URL.'/api/deals/'.self::DEFAULT_DEAL_ID.'/open-dispute':
                 $response = $this->openDispute($request);
+                break;
+            case Base::BASE_URL.'/api/deals/'.self::DEFAULT_DEAL_ID.'/confirm':
+                $response = $this->confirm($request);
                 break;
             default:
                 $response = $this->returnError();
@@ -251,7 +255,7 @@ class TestTransport implements TransportInterface
                 'ServiceId',
                 'Commission',
             ];
-            $params = $request->getParams();
+            $params = $request->getData();
             $resultValidation = $this->validateKeys($request, $keys);
             if (false === $resultValidation) {
                 return $this->returnError();
@@ -356,7 +360,7 @@ class TestTransport implements TransportInterface
                 [
                     'IsSuccess' => true,
                     'Code' => 0,
-                    'Data' => 129001,
+                    'Data' => self::DEFAULT_USER_ID,
                     'Error' => null,
                     'ErrorResourceKey' => '0_error_code',
                     'Description' => null,
@@ -615,6 +619,21 @@ class TestTransport implements TransportInterface
     }
 
     /**
+     * Заглушка для запросов по адресу
+     * https://guarantee.money/api/deals/{DEFAULT_DEAL_ID}/confirm.
+     *
+     * // todo подставить правильный ответ
+     *
+     * @param RequestInterface $request
+     *
+     * @return Response
+     */
+    private function confirm(RequestInterface $request)
+    {
+        return new Response([]);
+    }
+
+    /**
      * Проверяет что в объекте Response присутствуют все необходимые параметры.
      *
      * @param RequestInterface $request
@@ -667,11 +686,7 @@ class TestTransport implements TransportInterface
      */
     private function numberFormat($number)
     {
-        if (function_exists('renumber_format')) {
-            return renumber_format((float) $number, 1, '.', '');
-        } else {
-            throw new \Exception('Function `renumber_format` not exist');
-        }
+        return number_format((float) $number, 1, '.', '');
     }
 
     /**
