@@ -47,14 +47,11 @@ class HttpClientTransport implements TransportInterface
         if (!is_null($this->token)) {
             $params['auth_bearer'] = $this->token;
         }
-        var_export($request->getUrl());
 
         $response = $this->client->request(
             $request->getMethod(),
             $request->getUrl(),
             $params);
-
-        var_export($response->toArray());
 
         return new Response($response->toArray());
     }
