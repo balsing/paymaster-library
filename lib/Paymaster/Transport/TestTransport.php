@@ -622,8 +622,6 @@ class TestTransport implements TransportInterface
      * Заглушка для запросов по адресу
      * https://guarantee.money/api/deals/{DEFAULT_DEAL_ID}/confirm.
      *
-     * // todo подставить правильный ответ
-     *
      * @param RequestInterface $request
      *
      * @return Response
