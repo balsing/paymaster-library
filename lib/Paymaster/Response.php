@@ -114,7 +114,7 @@ class Response implements ResponseInterface
             if (intval($this->code) > 0) {
                 $codes = $this->getErrorCodes();
                 $code = $this->code - 1;
-                $this->errorByCode = $codes[$code];
+                $this->errorByCode = $codes[$code] ?? 'undefined error';
             }
         }
 
