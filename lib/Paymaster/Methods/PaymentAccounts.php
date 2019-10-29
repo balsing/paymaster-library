@@ -43,13 +43,15 @@ class PaymentAccounts extends Base
      * Удалить кошелёк/счёт
      *
      * @param $id
+     * @param $data
      *
      * @return \Paymaster\Response
      */
-    public function delete($id)
+    public function delete($id, $data)
     {
         $this->url = $this->makePatch('/{id}', ['id' => $id]);
         $this->method = Request::DELETE;
+        $this->data = $data;
 
         return $this->execute();
     }
