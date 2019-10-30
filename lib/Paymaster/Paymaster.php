@@ -13,7 +13,6 @@ use Paymaster\Transport\TestTransport;
  */
 class Paymaster extends Methods
 {
-    const DEV_MODE = 'develop';
     /**
      * @var TransportInterface
      */
@@ -22,15 +21,11 @@ class Paymaster extends Methods
     /**
      * Paymaster constructor.
      *
-     * @param TransportInterface|null $transport
+     * @param TransportInterface $transport
      */
-    public function __construct($mode = null)
+    public function __construct(TransportInterface $transport)
     {
-        if (self::DEV_MODE === $mode) {
-            $this->transport = new TestTransport();
-        } else {
-            $this->transport = new HttpClientTransport();
-        }
+        $this->transport = $transport;
     }
 
     public function setBearerToken($token)
