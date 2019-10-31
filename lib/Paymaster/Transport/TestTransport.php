@@ -28,11 +28,13 @@ class TestTransport implements TransportInterface
     public function request(RequestInterface $request): ResponseInterface
     {
         $url = $request->getUrl();
+
         switch ($url) {
             case Base::BASE_URL.'/api/authentication':
                 $response = $this->authentication($request);
                 break;
             case Base::BASE_URL.'/api/profile/payment-accounts':
+            case Base::BASE_URL.'/api/profile/payment-accounts/1111':
                 $response = $this->profilePaymentAccountsStub($request);
                 break;
             case Base::BASE_URL.'/api/contracts':
@@ -126,6 +128,8 @@ class TestTransport implements TransportInterface
         if (false === $checkToken) {
             return $this->returnError();
         }
+
+        // получение БК
         if (Request::GET == $request->getMethod()) {
             $params = $request->getParams();
             if ($params['userLogin'] == htmlspecialchars(self::DEFAULT_OWNER_LOGIN)) {
@@ -190,32 +194,51 @@ class TestTransport implements TransportInterface
                 );
             }
         } elseif (Request::POST === $request->getMethod()) {
-            $params = $request->getParams();
-            $keys = ['userLogin', 'Purse', 'Paymethod', 'Currency', 'CardHolder', 'CardMonth', 'CardYear'];
+            // добавление БК
+            $keys = ['UserLogin', 'Purse', 'Paymethod', 'Currency', 'CardHolder', 'CardMonth', 'CardYear'];
             $resultValidation = $this->validateKeys($request, $keys);
             if (false === $resultValidation) {
                 return $this->returnError();
             }
 
-            $cardsId = '1234';
-            if ($params['userLogin'] == htmlspecialchars(self::DEFAULT_OWNER_LOGIN)) {
-                $cardsId = '1111';
+            $cardNumber = $request->getData()['Purse'];
+            if ($cardNumber === '4000111122221234') {
+                return new Response(
+                    [
+                        'IsSuccess' => true,
+                        'Code' => 0,
+                        'Data' => rand(1111, 9999),
+                        'Error' => null,
+                        'ErrorResourceKey' => '0_error_code',
+                        'Description' => null,
+                        'Advices' => null,
+                    ]
+                );
             }
-            if ($params['userLogin'] == htmlspecialchars(self::DEFAULT_RENTER_LOGIN)) {
-                $cardsId = '7777';
+        } elseif (Request::DELETE === $request->getMethod()) {
+            // удаление БК
+            $keys = ['UserLogin'];
+            $resultValidation = $this->validateKeys($request, $keys);
+
+            if (false === $resultValidation) {
+                return $this->returnError();
             }
 
-            return new Response(
-                [
+            $urlParts = explode('/', $request->getUrl());
+            $paymasterId = end($urlParts);
+
+            if ($paymasterId === '1111') {
+                return new Response([
                     'IsSuccess' => true,
                     'Code' => 0,
-                    'Data' => $cardsId,
+                    'Data' => $paymasterId,
                     'Error' => null,
                     'ErrorResourceKey' => '0_error_code',
                     'Description' => null,
                     'Advices' => null,
-                ]
-            );
+                ]);
+            }
+
         }
 
         return $this->returnError();
@@ -560,57 +583,57 @@ class TestTransport implements TransportInterface
             'IsSuccess' => true,
             'Code' => 0,
             'Data' => [
-                    'Id' => self::DEFAULT_DEAL_ID,
-                    'ContractId' => self::DEFAULT_CONTRACT_ID,
-                    'Transactions' => null,
-                    'ServiceId' => self::DEFAULT_SERVICE_ID,
-                    'Name' => 'Тестовое предложение от имени арендатора',
-                    'Initiator' => [
-                            'Id' => 11111,
-                            'UserLogin' => self::DEFAULT_RENTER_LOGIN,
-                            'AvatarBase64' => null,
-                            'FirstName' => null,
-                            'Surname' => null,
-                            'Patronymic' => null,
-                            'AllowedPayMethods' => null,
-                            'Scoring' => null,
-                            'LoginProvider' => null,
-                            'Email' => null,
-                            'Bll' => null,
-                        ],
-                    'Partner' => [
-                            'Id' => 22222,
-                            'UserLogin' => self::DEFAULT_OWNER_LOGIN,
-                            'AvatarBase64' => null,
-                            'FirstName' => null,
-                            'Surname' => null,
-                            'Patronymic' => null,
-                            'AllowedPayMethods' => null,
-                            'Scoring' => null,
-                            'LoginProvider' => null,
-                            'Email' => null,
-                            'Bll' => null,
-                        ],
-                    'InitiatorRole' => 'Payer',
-                    'Status' => 2,
-                    'InProgressState' => 1,
-                    'Amount' => 300.0,
-                    'Currency' => 'RUB',
-                    'Paymethod' => 'CardsTest',
-                    'CommissionsType' => 'Payer',
-                    'Description' => 'Тестовое описание',
-                    'Terms' => null,
-                    'Tags' => null,
-                    'DepositInitiator' => 300.0,
-                    'DepositPartner' => 0.0,
-                    'DisputeReason' => 'ByInitiator',
-                    'DepositToPayee' => true,
-                    'Duration' => '2019-12-12T11:29:15.59',
-                    'CreateDate' => '2019-10-15T14:41:48.013',
-                    'ContractType' => 0,
-                    'NeedPayeePurse' => false,
-                    'UnreadMessages' => 0,
+                'Id' => self::DEFAULT_DEAL_ID,
+                'ContractId' => self::DEFAULT_CONTRACT_ID,
+                'Transactions' => null,
+                'ServiceId' => self::DEFAULT_SERVICE_ID,
+                'Name' => 'Тестовое предложение от имени арендатора',
+                'Initiator' => [
+                    'Id' => 11111,
+                    'UserLogin' => self::DEFAULT_RENTER_LOGIN,
+                    'AvatarBase64' => null,
+                    'FirstName' => null,
+                    'Surname' => null,
+                    'Patronymic' => null,
+                    'AllowedPayMethods' => null,
+                    'Scoring' => null,
+                    'LoginProvider' => null,
+                    'Email' => null,
+                    'Bll' => null,
                 ],
+                'Partner' => [
+                    'Id' => 22222,
+                    'UserLogin' => self::DEFAULT_OWNER_LOGIN,
+                    'AvatarBase64' => null,
+                    'FirstName' => null,
+                    'Surname' => null,
+                    'Patronymic' => null,
+                    'AllowedPayMethods' => null,
+                    'Scoring' => null,
+                    'LoginProvider' => null,
+                    'Email' => null,
+                    'Bll' => null,
+                ],
+                'InitiatorRole' => 'Payer',
+                'Status' => 2,
+                'InProgressState' => 1,
+                'Amount' => 300.0,
+                'Currency' => 'RUB',
+                'Paymethod' => 'CardsTest',
+                'CommissionsType' => 'Payer',
+                'Description' => 'Тестовое описание',
+                'Terms' => null,
+                'Tags' => null,
+                'DepositInitiator' => 300.0,
+                'DepositPartner' => 0.0,
+                'DisputeReason' => 'ByInitiator',
+                'DepositToPayee' => true,
+                'Duration' => '2019-12-12T11:29:15.59',
+                'CreateDate' => '2019-10-15T14:41:48.013',
+                'ContractType' => 0,
+                'NeedPayeePurse' => false,
+                'UnreadMessages' => 0,
+            ],
             'Error' => null,
             'ErrorResourceKey' => '0_error_code',
             'Description' => null,
