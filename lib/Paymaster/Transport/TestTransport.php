@@ -46,6 +46,7 @@ class TestTransport implements TransportInterface
             case Base::BASE_URL.'/api/contracts/'.self::DEFAULT_CONTRACT_ID.'/accept':
                 $response = $this->acceptContract($request);
                 break;
+            case Base::BASE_URL.'/api/contracts/7777/decline':
             case Base::BASE_URL.'/api/contracts/'.self::DEFAULT_CONTRACT_ID.'/decline':
                 $response = $this->declineContract($request);
                 break;
