@@ -58,6 +58,9 @@ class TestTransport implements TransportInterface
             case Base::BASE_URL.'/api/deals/'.self::DEFAULT_DEAL_ID.'/confirm':
                 $response = $this->confirm($request);
                 break;
+            case Base::BASE_URL.'/api/commissions/calculate-dynamic':
+                $response = $this->calculateDynamic($request);
+                break;
             default:
                 $response = $this->returnError();
                 break;
@@ -202,7 +205,7 @@ class TestTransport implements TransportInterface
             }
 
             $cardNumber = $request->getData()['Purse'];
-            if ($cardNumber === '4000111122221234') {
+            if ('4000111122221234' === $cardNumber) {
                 return new Response(
                     [
                         'IsSuccess' => true,
@@ -227,7 +230,7 @@ class TestTransport implements TransportInterface
             $urlParts = explode('/', $request->getUrl());
             $paymasterId = end($urlParts);
 
-            if ($paymasterId === '1111') {
+            if ('1111' === $paymasterId) {
                 return new Response([
                     'IsSuccess' => true,
                     'Code' => 0,
@@ -238,7 +241,6 @@ class TestTransport implements TransportInterface
                     'Advices' => null,
                 ]);
             }
-
         }
 
         return $this->returnError();
@@ -859,5 +861,17 @@ class TestTransport implements TransportInterface
     private function checkToken()
     {
         return !is_null($this->token);
+    }
+
+    private function calculateDynamic(RequestInterface $request)
+    {
+        $params = $request->getParams();
+        $amount = $params['Amount'];
+
+        return new Response([
+            'PayerCommission' => rand($amount / 10, $amount / 3),
+            'PayeeCommission' => 0.0,
+            'MinAmount' => 10.0,
+        ]);
     }
 }

@@ -3,8 +3,6 @@
 namespace Paymaster;
 
 use Paymaster\Interfaces\TransportInterface;
-use Paymaster\Transport\HttpClientTransport;
-use Paymaster\Transport\TestTransport;
 
 /**
  * Основной.
