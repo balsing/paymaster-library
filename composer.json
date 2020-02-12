@@ -1,5 +1,5 @@
 {
-    "name": "youtool/paymaster-library",
+    "name": "balsing/paymaster-library",
     "description": "Библиотека для guarantee.money",
     "type": "library",
     "require": {
