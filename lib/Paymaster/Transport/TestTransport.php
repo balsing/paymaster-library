@@ -866,7 +866,7 @@ class TestTransport implements TransportInterface
 
     private function calculateDynamic(RequestInterface $request)
     {
-        $params = $request->getParams();
+        $params = $request->getData();
         $amount = $params['Amount'];
 
         return new Response([
