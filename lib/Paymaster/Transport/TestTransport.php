@@ -870,9 +870,17 @@ class TestTransport implements TransportInterface
         $amount = $params['Amount'];
 
         return new Response([
-            'PayerCommission' => rand($amount / 10, $amount / 3),
-            'PayeeCommission' => 0.0,
-            'MinAmount' => 10.0,
+            'IsSuccess' => true,
+            'Code' => 10,
+            'Data' => [
+                'PayerCommission' => rand($amount / 10, $amount / 3),
+                'PayeeCommission' => 0.0,
+                'MinAmount' => 10.0,
+            ],
+            'Error' => null,
+            'ErrorResourceKey' => '0_error_code',
+            'Description' => null,
+            'Advices' => null,
         ]);
     }
 }
